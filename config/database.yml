@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: free_i_am_production
-  username: free_i_am
+  database: <%= ENV["FREE_I_AM_DATABASE_NAME"] %>
+  username: <%= ENV["FREE_I_AM_DATABASE_USERNAME"] %>
   password: <%= ENV["FREE_I_AM_DATABASE_PASSWORD"] %>
