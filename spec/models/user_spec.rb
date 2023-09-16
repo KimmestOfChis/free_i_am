@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "shared_examples/model_attributes"
 
 RSpec.describe User do
   subject { build(:user) }
@@ -12,27 +13,6 @@ RSpec.describe User do
     it { is_expected.to validate_uniqueness_of(:email) }
     it { is_expected.to validate_length_of(:password).is_at_least(6) }
     it { is_expected.to validate_confirmation_of(:password) }
-  end
-
-  RSpec.shared_examples "a valid attribute" do |attribute, value|
-    let(:attributes) { attributes_for(:user, attribute => value) }
-    let(:user) { described_class.new(attributes) }
-
-    before { user.valid? }
-
-    it { expect(user).to be_valid }
-  end
-
-  RSpec.shared_examples "an invalid attribute" do |attribute, value, message|
-    let(:attributes) { attributes_for(described_class.name.downcase.to_sym, attribute => value) }
-    let(:model_instance) { described_class.new(attributes) }
-
-    before { model_instance.valid? }
-
-    attribute = :password if attribute == :password_confirmation
-
-    it { expect(model_instance).not_to be_valid }
-    it { expect(model_instance.errors[attribute]).to include(message) }
   end
 
   RSpec.shared_examples "password complexity validation" do |password_param|
