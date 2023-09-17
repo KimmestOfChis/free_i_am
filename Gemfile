@@ -12,12 +12,12 @@ gem "puma", "~> 5.0"
 gem "rails", "~> 7.0.7", ">= 7.0.7.2"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
+gem "active_model_serializers", "~> 0.10.12"
 gem "pry-rails", "~> 0.3.9"
 gem "rubocop", "~> 1.56", require: false
 gem "rubocop-performance", "~> 1.11", require: false
 gem "rubocop-rails", "~> 2.11", require: false
 gem "rubocop-rspec", "~> 2.2", require: false
-gem 'active_model_serializers', '~> 0.10.12'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

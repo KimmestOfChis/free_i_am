@@ -2,7 +2,7 @@
 
 class ErrorsController < ApplicationController
   def not_found
-    render json: { error: 'not_found' }, status: :not_found
+    render json: { error: "not_found" }, status: :not_found
   end
 
   def handle_bad_request
