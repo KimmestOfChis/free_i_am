@@ -12,7 +12,7 @@ AllCops:
     - 'bin/**/*'
 
 Layout/LineLength:
-  Max: 120
+  Max: 180
 
 Metrics/BlockLength:
   Exclude:
@@ -39,6 +39,9 @@ Rails:
 
 Rails/SaveBang:
   Enabled: true
+
+RSpec/ExampleLength:
+  Enabled: false
 
 # Add other rules below this line
 

@@ -32,7 +32,31 @@ RSpec.describe "Users" do
       it { expect(response).to have_http_status(:unprocessable_entity) }
 
       it {
-        expect(response.parsed_body["errors"]).to include("Email can't be blank")
+        expect(response.parsed_body).to include({ "status" => 422, "message" => "Validation Failed",
+                                                  "details" => [
+                                                    "Password can't be blank",
+                                                    "Email can't be blank",
+                                                    "Email is invalid",
+                                                    "Password is too short (minimum is 6 characters)",
+                                                    "Password Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character"
+                                                  ] })
+      }
+    end
+
+    context "when email is already taken" do
+      before do
+        create(:user, email: user_params[:email])
+        post "/users", params: user_params
+      end
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+
+      it {
+        expect(response.parsed_body).to include({
+                                                  "status" => 422,
+                                                  "message" => "Validation Failed",
+                                                  "details" => ["Email has already been taken"]
+                                                })
       }
     end
   end
