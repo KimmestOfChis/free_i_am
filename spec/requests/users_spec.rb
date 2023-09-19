@@ -65,11 +65,11 @@ RSpec.describe "Users" do
     let(:email) { Faker::Internet.email }
     let(:user) { create(:user) }
 
-    before do
-      put "/users/#{user.id}", params: { email:, password:, password_confirmation: password }
-    end
-
     context "when user is valid" do
+      before do
+        put "/users/#{user.id}", params: { email:, password:, password_confirmation: password }
+      end
+
       let(:fetched_user) { User.find(user.id) }
 
       it { expect(response).to have_http_status(:ok) }
@@ -79,6 +79,51 @@ RSpec.describe "Users" do
                                              "email" => email,
                                              "created_at" => fetched_user.created_at.as_json,
                                              "updated_at" => fetched_user.updated_at.as_json })
+      }
+    end
+
+    context "when email is already taken" do
+      before do
+        new_user = create(:user)
+        put "/users/#{new_user.id}", params: { email: user.email, password:, password_confirmation: password }
+      end
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+
+      it {
+        expect(response.parsed_body).to include({
+                                                  "status" => 422,
+                                                  "message" => "Validation Failed",
+                                                  "details" => ["Email has already been taken"]
+                                                })
+      }
+    end
+  end
+
+  describe "DELETE /users/:id" do
+    let(:user) { create(:user) }
+
+    context "when the user exists" do
+      before do
+        delete "/users/#{user.id}"
+      end
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it {
+        expect(response.parsed_body).to eq({ "status" => 200, "message" => "User deleted successfully" })
+      }
+    end
+
+    context "when the user does not exist" do
+      before do
+        delete "/users/0"
+      end
+
+      it { expect(response).to have_http_status(:not_found) }
+
+      it {
+        expect(response.parsed_body).to eq({ "status" => 404, "message" => "Not Found", "details" => "Couldn't find User with 'id'=0" })
       }
     end
   end

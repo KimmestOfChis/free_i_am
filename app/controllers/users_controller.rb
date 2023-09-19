@@ -15,6 +15,13 @@ class UsersController < ApplicationController
     render json: @user, status: :ok, serializer: UserSerializer
   end
 
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy!
+
+    render json: { status: 200, message: "User deleted successfully" }
+  end
+
   private
 
   def user_params
