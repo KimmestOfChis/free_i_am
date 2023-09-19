@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Users" do
-  describe "POST /users" do
-    let(:password) { "Password123!@#" }
-    let(:user_params) do
-      attributes_for(:user, password:, password_confirmation: password)
-    end
+  let(:password) { "Password123!@#" }
+  let(:user_params) do
+    attributes_for(:user, password:, password_confirmation: password)
+  end
 
+  describe "POST /users" do
     context "when user is valid" do
       before do
         post "/users", params: user_params
@@ -57,6 +57,28 @@ RSpec.describe "Users" do
                                                   "message" => "Validation Failed",
                                                   "details" => ["Email has already been taken"]
                                                 })
+      }
+    end
+  end
+
+  describe "PUT /users/:id" do
+    let(:email) { Faker::Internet.email }
+    let(:user) { create(:user) }
+
+    before do
+      put "/users/#{user.id}", params: { email:, password:, password_confirmation: password }
+    end
+
+    context "when user is valid" do
+      let(:fetched_user) { User.find(user.id) }
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it {
+        expect(response.parsed_body).to eq({ "id" => fetched_user.id,
+                                             "email" => email,
+                                             "created_at" => fetched_user.created_at.as_json,
+                                             "updated_at" => fetched_user.updated_at.as_json })
       }
     end
   end
