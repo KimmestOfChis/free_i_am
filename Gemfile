@@ -12,6 +12,7 @@ gem "puma", "~> 5.0"
 gem "rails", "~> 7.0.7", ">= 7.0.7.2"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
+gem "active_model_serializers", "~> 0.10.12"
 gem "pry-rails", "~> 0.3.9"
 gem "rubocop", "~> 1.56", require: false
 gem "rubocop-performance", "~> 1.11", require: false
